@@ -13,5 +13,13 @@
   },
   "devDependencies": {
     "jest": "^24.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:arneke/elma-status.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arneke/elma-status/issues"
+  },
+  "homepage": "https://github.com/arneke/elma-status"
 }
