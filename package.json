@@ -1,0 +1,17 @@
+{
+  "name": "elma-status",
+  "version": "1.0.0",
+  "description": "Node.js client to check organization number in ELMA (Norway's electronic recipient address registry)",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Arne Kepp",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
+  }
+}
