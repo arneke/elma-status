@@ -3,6 +3,8 @@
 ```
 var elmaStatus = require('elma-status');
 
-var status = elmaStatus('991825827');
-console.log(status);
+elmaStatus('991825827').then(status => {
+  console.log(status);
+});
+
 ```
