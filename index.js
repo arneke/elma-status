@@ -1,5 +1,5 @@
 /* Copyright 2019 Arne Kepp, Licensed under MIT */
-const axios = require('axios');
+const got = require('got');
 
 const DIFI_API = 'https://hotell.difi.no/api/jsonp/difi/elma/capabilities';
 const JSONP = 'npmElmaStatus';
@@ -11,18 +11,20 @@ function validateOrgNumber(orgNumber) {
 }
 
 function parseResponse(res) {
-  var obj = JSON.parse(res.data.match(/^npmElmaStatus\((.*)\)\;$/)[1]);
-  if(obj.entries.length == 0) return false;
-  return obj.entries[0];
+  var responseObject = JSON.parse(res.body.match(/^npmElmaStatus\((.*)\)\;$/)[1]);
+  const entries = responseObject.entries.filter(({ ehf_invoice_2, ehf_invoice}) =>
+    (ehf_invoice === 'true' || ehf_invoice_2 === 'true'));
+
+  if(entries.length == 0) return false;
+  return entries[0];
 }
 
 module.exports = function(organizationalNumber) {
-  const orgNumber = new String(organizationalNumber);
+  const orgNumber = `${organizationalNumber}`;
   validateOrgNumber(orgNumber);
 
-  return axios.get(DIFI_API, {
-    params: {
-      ehf_invoice: 'true',
+  return got(DIFI_API, {
+    searchParams: {
       query: orgNumber,
       callback: JSONP,
     }

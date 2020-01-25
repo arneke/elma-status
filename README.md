@@ -1,5 +1,8 @@
 # elma-status
 
+## Requirements
+Requires Node 10.x due to dependency on `got`
+
 ## Usage
 ```
 var elmaStatus = require('elma-status');
@@ -11,7 +14,7 @@ elmaStatus('991825827').then(status => {
 ```
 ## Response
 ```
-{ 
+{
   identifier: '991825827',
   peppolbis_creditnote: 'true',
   ehf_catalogue: 'false',

@@ -6,13 +6,16 @@
   "scripts": {
     "test": "jest"
   },
+  "engines" : {
+    "node" : ">=10.0.0"
+  },
   "author": "Arne Kepp",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0"
+    "got": "^10.3.0"
   },
   "devDependencies": {
-    "jest": "^24.1.0"
+    "jest": "^25.1.0"
   },
   "repository": {
     "type": "git",
