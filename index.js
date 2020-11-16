@@ -1,8 +1,8 @@
-/* Copyright 2019 Arne Kepp, Licensed under MIT */
+/* Copyright 2020 Arne Kepp, Licensed under MIT */
 const got = require('got');
 
-const DIFI_API = 'https://hotell.difi.no/api/jsonp/difi/elma/capabilities';
-const JSONP = 'npmElmaStatus';
+const EHF_KEY = 'PEPPOLBIS_3_0_BILLING_01_UBL';
+const DIFI_API = 'https://hotell.difi.no/api/json/difi/elma/participants';
 
 function validateOrgNumber(orgNumber) {
   if (!/^([\d]{9})$/.test(orgNumber)) {
@@ -10,24 +10,27 @@ function validateOrgNumber(orgNumber) {
   }
 }
 
-function parseResponse(res) {
-  var responseObject = JSON.parse(res.body.match(/^npmElmaStatus\((.*)\)\;$/)[1]);
-  const entries = responseObject.entries.filter(({ ehf_invoice_2, ehf_invoice}) =>
-    (ehf_invoice === 'true' || ehf_invoice_2 === 'true'));
-
+function parseResponse(body, key) {
+  const entries = body.entries.filter((entry) => {
+    const ehfKey = entry[key];
+    if (ehfKey === undefined) throw new Error('Response format from DiFI was unexpected, key was not present.');
+    return (ehfKey === 'Ja');
+  });
   if(entries.length == 0) return false;
   return entries[0];
 }
 
-module.exports = function(organizationalNumber) {
+module.exports = function(organizationalNumber, key = EHF_KEY) {
   const orgNumber = `${organizationalNumber}`;
   validateOrgNumber(orgNumber);
 
   return got(DIFI_API, {
     searchParams: {
       query: orgNumber,
-      callback: JSONP,
-    }
+      page: '1',
+    },
+    responseType: 'json',
+    resolveBodyOnly: true
   })
-  .then(parseResponse);
+  .then((body) => parseResponse(body, key));
 }
